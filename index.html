@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreamPlus+ - Tu servicio de streaming</title>
+  <link rel="stylesheet" href="index.css">
+  
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>STREAMPLUS+</h1>
+        <nav>
+          <a href="#planes">PLANES</a>
+          <a href="#testimonios">TESTIMONIOS</a>
+          <a href="#contacto">CONTACTO</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h2>Disfruta el mejor contenido en streaming</h2>
+    <p>Películas, series y más, sin límites y al mejor precio.</p>
+    <a href="#planes">Ver Planes</a>
+  </section>
+
+  <!-- Planes -->
+  <section id="planes" class="section">
+    <h3>Elige tu plan</h3>
+    <div class="plans">
+      <div class="plan">
+        <h4 class="netflix">NETFLIX</h4>
+        <p>$250/mes</p>
+        <ul>
+          <li>1 pantalla</li>
+          <li>Calidad HD</li>
+          <li>Acceso limitado</li>
+        </ul>
+        <button onclick="subscribe('Netflix')">Comenzar</button>
+      </div>
+      <div class="plan" style="border: 2px solid #2563eb;">
+        <h4 class="crunchyroll">CRUNCHYROLL</h4>
+        <p>$150/mes</p>
+        <ul>
+          <li>1 pantalla</li>
+          <li>Calidad HD</li>
+          <li>Contenido completo</li>
+        </ul>
+        <button onclick="subscribe('Crunchyroll')">Comenzar</button>
+      </div>
+      <div class="plan">
+        <h4 class="spotify">SPOTIFY</h4>
+        <p>$150/mes</p>
+        <ul>
+          <li>1 pantalla</li>
+          <li>Calidad 4K</li>
+          <li>Acceso total y sin anuncios</li>
+        </ul>
+        <button onclick="subscribe('Spotify')">Comenzar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonios -->
+  <section id="testimonios" class="section testimonios">
+    <h3>Lo que dicen nuestros usuarios</h3>
+    <div class="cards">
+      <div class="card">
+        <p>"Excelente servicio, siempre hay algo bueno para ver."</p>
+        <h5>Juan P.</h5>
+      </div>
+      <div class="card">
+        <p>"La calidad del contenido es increíble, y sin cortes."</p>
+        <h5>Marta R.</h5>
+      </div>
+      <div class="card">
+        <p>"Lo uso todos los días con mi familia. Vale la pena."</p>
+        <h5>Carlos L.</h5>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <footer id="contacto">
+    <h4>¿Tienes dudas? Contáctanos</h4>
+    <p>Email: ezequielav0225@gmail.com</p>
+    <div>
+      <a href="#">WhatsApp</a>
+      <a href="#">Instagram</a>
+    </div>
+    <p style="margin-top: 10px; font-size: 14px; color: gray;">&copy; 2025 StreamPlus. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    function subscribe(plan) {
+      alert(`¡Gracias por elegir el plan ${plan}! Pronto nos pondremos en contacto contigo.`);
+    }
+  </script>
+
+</body>
+</html>
