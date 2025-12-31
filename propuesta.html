@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Propuesta 💖</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+  body{
+    background:linear-gradient(135deg,#ff9ac8,#ffb6e0,#ffd0ef);
+    height:100vh;width:100vw;overflow:hidden;
+    display:flex;justify-content:center;align-items:center;
+    position:relative;
+  }
+
+  #contenido{
+    text-align:center;
+    display:flex;flex-direction:column;align-items:center;gap:60px;
+    margin-bottom: 20%;
+  }
+  
+  #si {
+    position: relative;
+    left: 39px;
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.6), 0 0 40px rgba(255, 192, 203, 0.5);
+    transition: box-shadow 0.4s ease;
+  }
+  #si:hover {
+    box-shadow: 0 0 30px rgba(255, 105, 180, 0.9), 0 0 60px rgba(255, 192, 203, 0.8);
+  }
+
+  h1{
+    color:#fff;
+    font-size:clamp(46px,8vw,90px);
+    text-shadow:0 0 14px rgba(255,255,255,.9);
+    margin:0;
+    text-align:center;
+    transition:opacity .6s ease, transform .6s ease;
+  }
+
+  .botones{
+    display:flex;justify-content:center;align-items:center;gap:80px;position:relative;z-index:10;
+  }
+
+  .btn{
+    padding:18px 48px;border:none;border-radius:50px;min-width:170px;
+    background:#ff4fa3;color:#fff;font-size:clamp(20px,3vw,26px);
+    box-shadow:0 8px 25px rgba(0,0,0,.18);cursor:pointer;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .btn:hover{transform:translateY(-3px);background:#ff268d}
+
+  /* 💞 Mensaje */
+  #mensaje{
+    display:none;
+    color:#fff;
+    font-size:clamp(54px,9vw,115px);
+    font-weight:600;
+    text-shadow:0 0 28px rgba(255,255,255,.9);
+    position:fixed;
+    top:40%;
+    left:50%;
+    transform:translate(-50%, -50%) scale(0.9);
+    opacity:0;
+    text-align:center;
+    line-height:1.3;
+    letter-spacing:1px;
+    animation:mensajeZoom 1s ease forwards;
+    transition:transform 1s ease;
+ 
+  }
+  @keyframes mensajeZoom{
+    0%{opacity:0; transform:translate(-50%, -50%) scale(0.9);}
+    100%{opacity:1; transform:translate(-50%, -50%) scale(1);}
+  }
+
+  .latido{animation:latir 2s ease-in-out infinite;}
+  @keyframes latir{
+    0%,100%{transform:translate(-50%, -50%) scale(1);}
+    50%{transform:translate(-50%, -50%) scale(1.05);}
+  }
+
+  /* 🎁 Botón del regalo */
+  #regalo{
+    display:none;
+    position:fixed;
+    top:73%;left:50%;
+    transform:translate(-50%,-50%) scale(0.9);
+    background:#ff4fa3;
+    color:#fff;
+    border:none;
+    border-radius:30px;
+    padding:22px 55px;
+    font-size:clamp(22px,3.5vw,28px);
+    cursor:pointer;
+    opacity:0;
+    text-align:center;
+    animation:aparecer 1s ease forwards;
+    transition:all .3s ease;
+    overflow:hidden;
+    font-size: 40px;
+    width: 80%;
+  }
+
+  @keyframes aparecer{
+    0%{opacity:0; transform:translate(-50%, -50%) scale(0.8);}
+    100%{opacity:1; transform:translate(-50%, -50%) scale(1);}
+  }
+
+  .brillo::before{
+    content:'';
+    position:absolute;
+    inset:-3px;
+    border-radius:55px;
+    background:linear-gradient(120deg,#fff,#ff69b4,#ffe6f0,#ff69b4,#fff);
+    background-size:400%;
+    z-index:-1;
+    filter:blur(6px);
+    animation:animarBorde 3s linear infinite;
+  }
+
+  @keyframes animarBorde{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+
+  #regalo:hover{
+    background:#ff268d;
+    transform:translate(-50%,-50%) scale(1.05);
+  }
+
+  .corazon{
+    position:fixed;color:#fff;animation:flotar 5s ease-in infinite;
+    pointer-events:none;z-index:0;
+  }
+  @keyframes flotar{
+    0%{transform:translateY(0) scale(1);opacity:1}
+    100%{transform:translateY(-80vh) scale(1.8);opacity:0}
+  }
+
+  .sube{transform:translate(-50%, calc(-56%)) scale(1);}
+
+  /* 🌌 Galaxia (oculta hasta abrir el regalo) */
+  #galaxia {display:none;position:fixed;inset:0;background:#000;z-index:9999;}
+  canvas { 
+  display:block; 
+  position:absolute; 
+  inset:0; 
+  z-index:1; 
+}
+
+  
+
+
+/* 🎧 Reproductor totalmente visible sobre la galaxia */
+.player{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  background:rgba(0,0,0,0.6);
+  border:2px solid rgba(255,255,255,0.5);
+  padding:14px 24px;
+  border-radius:50px;
+  box-shadow:0 0 25px rgba(255,105,180,0.7);
+  color:#fff;
+  font-size:15px;
+  z-index:999999; /* 🔝 se asegura de quedar encima del canvas */
+  width:90%;
+  max-width:460px;
+  opacity:0;
+  animation: fadeInPlayer 0.5s ease forwards 0.1s;
+  backdrop-filter:blur(12px);
+}
+
+@keyframes fadeInPlayer{
+  from{opacity:0;transform:translate(-50%,30px);}
+  to{opacity:1;transform:translate(-50%,0);}
+}
+
+.player button{
+  background:radial-gradient(circle,#ff4fa3 0%,#ff268d 100%);
+  border:none;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+  box-shadow:0 0 10px rgba(255,105,180,0.9);
+  transition:transform .25s, box-shadow .25s;
+  flex-shrink:0;
+}
+.player button:hover{
+  transform:scale(1.15);
+  box-shadow:0 0 18px rgba(255,160,220,0.9);
+}
+
+.progress{
+  flex:1;
+  height:12px;
+  background:rgba(255,255,255,0.25);
+  border-radius:8px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:inset 0 0 6px rgba(0,0,0,0.4);
+}
+.progress-bar{
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#ff268d,#ff99cc,#ffe6f0);
+  box-shadow:0 0 10px #ff4fa3,0 0 18px #ff99cc;
+  transition:width .2s linear;
+}
+.time{
+  min-width:95px;
+  text-align:right;
+  font-size:13px;
+  color:#fff;
+  text-shadow:0 0 6px #ff4fa3;
+}
+
+</style>
+</head>
+<body>
+
+  <div id="contenido">
+    <h1 id="titulo">¿Quieres ser mi novi@? 💖</h1>
+    <div class="botones">
+      <button id="si" class="btn">Sí 💘</button>
+      <button id="no" class="btn">No 💔</button>
+    </div>
+  </div>
+
+  <div id="mensaje">¡Sabía que dirías que sí! 💞</div>
+  <button id="regalo">🎁 Abre el regalo</button>
+
+  <!-- 🌌 Galaxia -->
+  <div id="galaxia">
+    <canvas id="c"></canvas>
+    <div class="player">
+  <button id="play">▶️</button>
+  <div class="progress" id="progress">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+  <div class="time" id="time">0:00 / 0:00</div>
+</div>
+
+    <audio id="audio" loop>
+      <source src="https://www.dropbox.com/scl/fi/qfv28rqu6b36jwusao4x4/Love.MP3?rlkey=ptjd053374f028aa4jfcfrfxn&st=1j0j51eo&raw=1" type="audio/mpeg">
+    </audio>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
+<script>
+const siBtn=document.getElementById('si');
+const noBtn=document.getElementById('no');
+const titulo=document.getElementById('titulo');
+const msg=document.getElementById('mensaje');
+const botones=document.querySelector('.botones');
+const regalo=document.getElementById('regalo');
+const galaxia=document.getElementById('galaxia');
+
+let siRect,tituloRect;
+
+document.addEventListener('DOMContentLoaded',()=>{
+  siRect = siBtn.getBoundingClientRect();
+  tituloRect = titulo.getBoundingClientRect();
+  siBtn.style.position = 'fixed';
+  siBtn.style.left = siRect.left + 'px';
+  siBtn.style.top = siRect.top + 'px';
+  siBtn.style.zIndex = 20;
+  noBtn.style.position = 'fixed';
+  noBtn.style.left = (siRect.right + 5) + 'px';
+  noBtn.style.top = siRect.top + 'px';
+});
+
+
+function moverNo(){
+  const bw=noBtn.offsetWidth,bh=noBtn.offsetHeight;
+  const vw=window.innerWidth,vh=window.innerHeight;
+  let x,y;
+  do{
+    x=Math.random()*(vw-bw-40)+20;
+    y=Math.random()*(vh-bh-40)+20;
+  }while(y<120);
+  noBtn.style.transition="left .8s ease, top .8s ease";
+  noBtn.style.left=`${x}px`;
+  noBtn.style.top =`${y}px`;
+}
+
+noBtn.addEventListener('mouseenter',moverNo);
+noBtn.addEventListener('touchstart',moverNo);
+
+siBtn.addEventListener('click',()=>{
+  titulo.style.opacity='0';
+  titulo.style.transform='translateY(-20px)';
+  botones.style.display='none';
+  msg.style.display='block';
+  setTimeout(()=>{msg.style.opacity='1';msg.classList.add('latido');},50);
+  lanzarCorazones();
+  setTimeout(()=>{
+    msg.classList.add('sube');
+    regalo.style.display='block';
+    regalo.classList.add('brillo');
+  },2000);
+});
+
+regalo.addEventListener('click',()=>{
+  regalo.classList.remove('brillo');
+  document.body.style.background='#000';
+  document.getElementById('contenido').style.display='none';
+  msg.style.display='none';
+  regalo.style.display='none';
+  galaxia.style.display='block';
+  iniciarGalaxia();
+});
+
+function lanzarCorazones(){
+  for(let i=0;i<25;i++){
+    const c=document.createElement('div');
+    c.className='corazon';
+    c.textContent='💖';
+    c.style.left=Math.random()*window.innerWidth+'px';
+    c.style.top=window.innerHeight+'px';
+    c.style.fontSize=(18+Math.random()*26)+'px';
+    c.style.animationDuration=(3+Math.random()*3)+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),6000);
+  }
+}
+
+// 🌌 Galaxia activa
+function iniciarGalaxia(){
+  const audio=document.getElementById('audio'),
+  playBtn=document.getElementById('play'),
+  progress=document.getElementById('progress'),
+  progressBar=document.getElementById('progress-bar'),
+  timeDisplay=document.getElementById('time');
+  let isPlaying=false;
+  playBtn.addEventListener('click',async()=>{
+    if(isPlaying){audio.pause();playBtn.textContent='▶️';}
+    else{await audio.play();playBtn.textContent='⏸️';}
+    isPlaying=!isPlaying;
+  });
+  function formatTime(sec){if(!isFinite(sec))return'0:00';const m=Math.floor(sec/60);const s=Math.floor(sec%60).toString().padStart(2,'0');return m+':'+s;}
+  audio.addEventListener('timeupdate',()=>{
+  const percent=(audio.currentTime/audio.duration)*100;
+  progressBar.style.width=(isFinite(percent)?percent:0)+'%';
+  timeDisplay.textContent=formatTime(audio.currentTime)+' / '+formatTime(audio.duration);
+});
+
+  progress.addEventListener('click',(e)=>{
+    const rect=progress.getBoundingClientRect();
+    const x=e.clientX-rect.left;
+    const percent=x/rect.width;
+    if(isFinite(audio.duration))audio.currentTime=percent*audio.duration;
+  });
+
+  const canvas=document.getElementById('c');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.setSize(innerWidth,innerHeight);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,5000);
+  let targetDist = 700, currentDist = 700, rotX = 0.25, rotY = 0;
+
+
+  const loader=new THREE.TextureLoader();
+  const nebulaTex=loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/space/px.jpg');
+  scene.background=nebulaTex;
+
+  (function makeStars(count=2000,spread=3000){
+    const g=new THREE.BufferGeometry();
+    const pos=new Float32Array(count*3);
+    for(let i=0;i<count;i++){
+      const r=spread*(0.3+Math.random()*0.7);
+      const th=Math.random()*Math.PI*2;
+      const ph=Math.acos(2*Math.random()-1);
+      pos[i*3+0]=r*Math.sin(ph)*Math.cos(th);
+      pos[i*3+1]=r*Math.cos(ph);
+      pos[i*3+2]=r*Math.sin(ph)*Math.sin(th);
+    }
+    g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:1.5,color:0xffffff,depthWrite:false})));
+  })();
+
+  const coreMat=new THREE.MeshPhongMaterial({color:0x111111,transparent:true,opacity:0.6,shininess:200});
+  const core=new THREE.Mesh(new THREE.SphereGeometry(40,64,64),coreMat);
+  scene.add(core);
+
+  function makeCenterTextTexture(msg){
+    const c=document.createElement('canvas');c.width=512;c.height=512;
+    const ctx=c.getContext('2d');
+    ctx.font='bold 80px Arial';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillStyle='#ff0033';
+    ctx.shadowColor='#ff66aa';
+    ctx.shadowBlur=50;
+    ctx.fillText(msg,c.width/2,c.height/2);
+    return new THREE.CanvasTexture(c);
+  }
+  const centerTex=makeCenterTextTexture("TE AMO ❤️");
+  const centerMat=new THREE.SpriteMaterial({map:centerTex,transparent:true});
+  const centerSprite=new THREE.Sprite(centerMat);
+  centerSprite.scale.set(60,60,1);
+  scene.add(centerSprite);
+
+  function makeGlow(size=768,c1='255,160,0',c2='255,60,0'){
+    const c=document.createElement('canvas');c.width=c.height=size;
+    const g=c.getContext('2d');
+    const grad=g.createRadialGradient(size/2,size/2,size*0.05,size/2,size/2,size*0.5);
+    grad.addColorStop(0,'rgba('+c1+',0.9)');
+    grad.addColorStop(0.5,'rgba('+c2+',0.5)');
+    grad.addColorStop(1,'rgba(0,0,0,0)');
+    g.fillStyle=grad;g.fillRect(0,0,size,size);
+    return new THREE.CanvasTexture(c);
+  }
+  const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:makeGlow(),transparent:true,depthWrite:false}));
+  glow.scale.set(500,500,1);
+  scene.add(glow);
+
+  function ringTexture(size=768){
+    const c=document.createElement('canvas');c.width=c.height=size;
+    const g=c.getContext('2d');g.translate(size/2,size/2);
+    const r1=size*0.34, r2=size*0.49;
+    const grd=g.createRadialGradient(0,0,r1*0.3,0,0,r2);
+    grd.addColorStop(0.0,'rgba(255,255,200,1)');
+    grd.addColorStop(0.3,'rgba(255,160,60,0.9)');
+    grd.addColorStop(0.65,'rgba(255,80,0,0.6)');
+    grd.addColorStop(1.0,'rgba(0,0,0,0)');
+    g.fillStyle=grd;
+    g.beginPath(); g.arc(0,0,r2,0,Math.PI*2); g.arc(0,0,r1,0,Math.PI*2,true); g.closePath(); g.fill();
+    return new THREE.CanvasTexture(c);
+  }
+  const ring1=new THREE.Mesh(new THREE.RingGeometry(60,80,128),new THREE.MeshBasicMaterial({map:ringTexture(),transparent:true,side:THREE.DoubleSide}));
+  const ring2=new THREE.Mesh(new THREE.RingGeometry(85,100,128),new THREE.MeshBasicMaterial({map:ringTexture(),transparent:true,side:THREE.DoubleSide,opacity:0.6}));
+  ring1.rotation.x=ring2.rotation.x=Math.PI/2;
+  scene.add(ring1);scene.add(ring2);
+
+
+// ======== Palabras alrededor (más pequeñas y con mejor distribución) ========
+const WORDS=[];
+const baseWords=[
+  '💖 Mi amor','🌞 Mi sol','🌎 Mi mundo','✨ Brillas','❤️ Te amo','🌌 Universo',
+  '👑 Mi sueño','🌠 Estrella','💫 Mi cielo','🔥 Siempre tú','🎶 Tu risa','🦋 Libertad',
+  '🌹 Amor eterno','💎 Eres todo','🌈 Alegría','🌟 Contigo','🎁 Mi razón','🥰 Mi vida'
+];
+for(let i=0;i<5;i++){WORDS.push(...baseWords);} // menos copias → menos saturación
+
+function makeWordTexture(text,color){
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  ctx.font='bold 60px Arial';
+  const textWidth=ctx.measureText(text).width+60;
+  canvas.width=textWidth;
+  canvas.height=120;
+  const ctx2=canvas.getContext('2d');
+  ctx2.font='bold 60px Arial';
+  ctx2.textAlign='center';
+  ctx2.textBaseline='middle';
+  ctx2.fillStyle='#fff';
+  ctx2.shadowColor=color;
+  ctx2.shadowBlur=35;
+  ctx2.fillText(text,canvas.width/2,canvas.height/2);
+  return new THREE.CanvasTexture(canvas);
+}
+
+const COLORS=['#ff66ff','#66ccff','#ffd36b','#ff9966','#8df59a','#ffa0f8','#c6a7ff','#ff4444','#44ff99','#99ccff'];
+const textGroup=new THREE.Group();
+scene.add(textGroup);
+
+for(let i=0;i<WORDS.length;i++){
+  const tex=makeWordTexture(WORDS[i],COLORS[i%COLORS.length]);
+  const mat=new THREE.SpriteMaterial({map:tex,transparent:true});
+  const sp=new THREE.Sprite(mat);
+  const aspect=tex.image.width/tex.image.height;
+  sp.scale.set(40*aspect,40,1); // más pequeñas y proporcionadas
+  const phi=Math.acos(2*Math.random()-1);
+  const theta=Math.random()*Math.PI*2;
+  const r=220+Math.random()*200; // más separadas del centro
+  sp.position.set(r*Math.sin(phi)*Math.cos(theta),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(theta));
+  sp.userData={phi,theta,radius:r,speed:0.0008+Math.random()*0.0012};
+  textGroup.add(sp);
+}
+
+
+
+  let dragging=false,lastX=0,lastY=0;
+  function onDown(e){dragging=true;const t=e.touches?e.touches[0]:e;lastX=t.clientX;lastY=t.clientY;}
+  function onMove(e){if(!dragging)return;const t=e.touches?e.touches[0]:e;const dx=(t.clientX-lastX)/innerWidth;const dy=(t.clientY-lastY)/innerHeight;rotY-=dx*3;rotX=Math.max(-1.2,Math.min(1.2,rotX-dy*2.2));lastX=t.clientX;lastY=t.clientY;}
+  function onUp(){dragging=false;}
+  addEventListener('mousedown',onDown);addEventListener('mousemove',onMove);addEventListener('mouseup',onUp);
+  addEventListener('touchstart',onDown,{passive:true});addEventListener('touchmove',onMove,{passive:true});addEventListener('touchend',onUp,{passive:true});
+  
+ // 🔍 Zoom con pellizco en móviles (más rango de zoom)
+let pinch = 0;
+addEventListener('touchmove', (e) => {
+  if (e.touches && e.touches.length === 2) {
+    e.preventDefault();
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const d = Math.hypot(dx, dy);
+
+    if (pinch) {
+      targetDist += (pinch - d) * 0.5;
+      targetDist = Math.max(60, Math.min(2000, targetDist)); // 🔥 más rango táctil
+    }
+    pinch = d;
+  }
+}, { passive: false });
+
+addEventListener('touchend', () => { pinch = 0; }, { passive: true });
+
+
+  
+  addEventListener('wheel',(e)=>{
+  targetDist += e.deltaY * 0.25;
+  targetDist = Math.max(80, Math.min(900, targetDist)); // 🔥 ahora puedes acercarte más (80) y alejarte más (900)
+},{passive:true});
+
+
+  let t=0;
+  function tick(){requestAnimationFrame(tick);t+=0.01;
+    ring1.rotation.z+=0.002;ring2.rotation.z-=0.0015;
+    glow.scale.set(500*(1+Math.sin(t*0.4)*0.03),500*(1+Math.sin(t*0.4)*0.03),1);
+    const s=1.0+0.05*Math.sin(t*3);
+    core.scale.set(s,s,s);
+    textGroup.children.forEach(sp=>{
+      sp.userData.theta+=sp.userData.speed;
+      sp.position.x=sp.userData.radius*Math.sin(sp.userData.phi)*Math.cos(sp.userData.theta);
+      sp.position.z=sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
+    });
+    currentDist+=(targetDist-currentDist)*0.06;
+    const cx=Math.cos(rotX),sx=Math.sin(rotX);const cy=Math.cos(rotY),sy=Math.sin(rotY);
+    camera.position.set(currentDist*sy*cx,currentDist*sx,currentDist*cy*cx);
+    camera.lookAt(0,0,0);
+    renderer.render(scene,camera);
+  }
+  tick();
+}
+</script>
+</body>
+</html>
